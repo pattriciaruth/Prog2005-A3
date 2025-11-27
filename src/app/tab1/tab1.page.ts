@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InventoryService } from '../services/inventory.service';
-import { CafeItem } from '../models/cafe-item';
+import { Item } from '../models/item';
 
 @Component({
   selector: 'app-tab1',
@@ -10,7 +10,7 @@ import { CafeItem } from '../models/cafe-item';
 })
 export class Tab1Page implements OnInit {
 
-  items: CafeItem[] = [];         // 👈 important: initialised as []
+  items: Item[] = [];         // 👈 important: initialised as []
   errorMessage = '';
 
   constructor(private inventoryService: InventoryService) {}

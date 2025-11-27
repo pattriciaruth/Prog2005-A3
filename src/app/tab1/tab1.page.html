@@ -18,14 +18,26 @@
 
   <!-- Show list only if items array exists and has elements -->
   <ion-list *ngIf="items && items.length > 0">
-    <ion-item *ngFor="let item of items">
-      <ion-label>
-        <h2>{{ item.name }}</h2>
-        <p>Category: {{ item.category }}</p>
-        <p>Price: {{ item.price }}</p>
-        <p>Quantity: {{ item.quantity }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  <ion-item *ngFor="let item of items">
+    <ion-label>
+      <h2>{{ item.itemName }} (ID: {{ item.itemId }})</h2>
+
+      <p>Category: {{ item.category }}</p>
+      <p>Price: {{ item.price }}</p>
+      <p>Quantity: {{ item.quantity }}</p>
+      <p>Supplier: {{ item.supplierName }}</p>
+      <p>Stock Status: {{ item.stockStatus }}</p>
+
+      <p *ngIf="item.featuredItem === 1">
+        ⭐ Featured Item
+      </p>
+
+      <p *ngIf="item.specialNote">
+        Note: {{ item.specialNote }}
+      </p>
+    </ion-label>
+  </ion-item>
+</ion-list>
+
 
 </ion-content>
