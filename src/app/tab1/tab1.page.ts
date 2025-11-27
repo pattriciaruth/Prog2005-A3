@@ -7,6 +7,8 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class Tab1Page {
+errorMessage: any;
+items: any;
 
   constructor() {}
 
