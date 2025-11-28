@@ -6,10 +6,10 @@
  */
 export interface Item {
   /** Unique ID assigned to the item (auto-increment). */
-  itemId: number;
+  item_id: number;
 
   /** Name of the item. */
-  itemName: string;
+  item_name: string;
 
   /** Category of the item. */
   category: 'Electronics' | 'Furniture' | 'Clothing' | 'Tools' | 'Miscellaneous';
@@ -21,14 +21,14 @@ export interface Item {
   price: number;
 
   /** Supplier or vendor providing this item. */
-  supplierName: string;
+  supplier_name: string;
 
   /** Stock status of the item. */
-  stockStatus: 'In Stock' | 'Low Stock' | 'Out of Stock';
+  stock_status: 'In Stock' | 'Low Stock' | 'Out of Stock';
 
   /** Marked as featured? (0 = no, 1 = yes, etc.). */
-  featuredItem: number;
+  featured_item: number;
 
   /** Optional note (special handling, comments, etc.). */
-  specialNote?: string;
+  special_note?: string;
 }
