@@ -1,51 +1,111 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Items (Test)</ion-title>
+    <ion-title>Browse Items</ion-title>
+
+    <!-- Help button in header -->
+    <ion-buttons slot="end">
+      <ion-button (click)="openHelp()">
+        <ion-icon name="help-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content [fullscreen]="true" class="ion-padding">
 
-  <!-- Show error if something went wrong -->
+  <!-- Pull-to-refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Search bar -->
+  <ion-searchbar
+    [(ngModel)]="searchTerm"
+    (ionInput)="filterItems()"
+    placeholder="Search items by name">
+  </ion-searchbar>
+
+  <!-- Protected record note -->
+  <ion-card class="info-card">
+    <ion-item lines="none">
+      <ion-icon name="alert-circle" slot="start" color="warning"></ion-icon>
+      <ion-label>
+        <h2>Protected record</h2>
+        <p><strong>Laptop</strong> cannot be deleted (server rule).</p>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <!-- Error message -->
   <ion-text color="danger" *ngIf="errorMessage">
-    {{ errorMessage }}
+    <p>{{ errorMessage }}</p>
   </ion-text>
 
-  <!-- Show 'no items' message safely -->
-  <ion-text *ngIf="!errorMessage && items.length === 0">
-    No items loaded yet.
-  </ion-text>
+  <!-- Loading spinner -->
+  <div class="center" *ngIf="isLoading">
+    <ion-spinner></ion-spinner>
+  </div>
 
-  <!-- Show list only if items array exists and has elements -->
-  <ion-list *ngIf="items && items.length > 0">
-  <ion-item *ngFor="let item of items">
-    <ion-label>
-      <!-- name + id -->
-      <h2>
-        {{ item.item_name || '(no name)' }}
-        &nbsp; (ID: {{ item.item_id }})
-      </h2>
+  <!-- Empty state -->
+  <div class="center" *ngIf="!isLoading && !errorMessage && filteredItems.length === 0">
+    <ion-text color="medium">
+      <p>No items found. Try another search.</p>
+    </ion-text>
+  </div>
 
-      <!-- main fields -->
-      <p>Category: {{ item.category }}</p>
-      <p>Price: {{ item.price }}</p>
-      <p>Quantity: {{ item.quantity }}</p>
+  <!-- Item list -->
+  <ion-list *ngIf="filteredItems.length > 0">
+    <ion-item
+      *ngFor="let item of filteredItems"
+      lines="full"
+      class="item-card">
 
-      <!-- optional fields (will show only if present) -->
-      <p *ngIf="item.supplier_name">Supplier: {{ item.supplier_name }}</p>
-      <p *ngIf="item.stock_status">Stock Status: {{ item.stock_status }}</p>
+      <!-- Category icon -->
+      <ion-avatar slot="start" class="category-avatar" [ngClass]="getCategoryColor(item.category)">
+        <ion-icon [name]="getCategoryIcon(item.category)"></ion-icon>
+      </ion-avatar>
 
-      <p *ngIf="item.featured_item === 1">
-        ⭐ Featured Item
-      </p>
+      <ion-label>
+        <div class="item-header">
+          <h2>{{ item.item_name || '(Unnamed item)' }}</h2>
 
-      <p *ngIf="item.special_note">
-        Note: {{ item.special_note }}
-      </p>
-    </ion-label>
-  </ion-item>
-</ion-list>
+          <!-- Featured badge -->
+          <ion-chip *ngIf="item.featured_item === 1" color="secondary" outline class="featured-chip">
+            <ion-icon name="star"></ion-icon>
+            <ion-label>Featured</ion-label>
+          </ion-chip>
+        </div>
 
+        <p class="category-line">
+          {{ item.category }} • Supplier: {{ item.supplier_name || 'N/A' }}
+        </p>
 
+        <div class="meta-row">
+          <span>Price: ${{ item.price }}</span>
+          <span>Qty: {{ item.quantity }}</span>
+        </div>
 
+        <!-- Stock status chip -->
+        <ion-chip [color]="getStatusColor(item.stock_status)" class="status-chip">
+          <ion-icon name="checkmark-circle" *ngIf="item.stock_status === 'In Stock'"></ion-icon>
+          <ion-icon name="warning" *ngIf="item.stock_status === 'Low Stock'"></ion-icon>
+          <ion-icon name="close-circle" *ngIf="item.stock_status === 'Out of Stock'"></ion-icon>
+          <ion-label>{{ item.stock_status }}</ion-label>
+        </ion-chip>
+
+        <!-- Optional note -->
+        <p class="note" *ngIf="item.special_note">
+          {{ item.special_note }}
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Floating Help FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openHelp()">
+      <ion-icon name="help"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
+
