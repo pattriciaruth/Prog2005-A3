@@ -1,111 +1,160 @@
-<ion-header>
+<ion-header translucent="true">
   <ion-toolbar>
-    <ion-title>Browse Items</ion-title>
+    <div class="app-header">
+      <div class="title-block">
+        <h1>Café Inventory</h1>
+        <p class="subtitle">Browse items, stock levels, and featured products.</p>
+      </div>
 
-    <!-- Help button in header -->
-    <ion-buttons slot="end">
-      <ion-button (click)="openHelp()">
-        <ion-icon name="help-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+      <div class="header-meta">
+        <ion-badge color="tertiary">
+          {{ filteredItems.length || items.length }} items
+        </ion-badge>
+      </div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true">
+  <div class="app-main">
 
-  <!-- Pull-to-refresh -->
-  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+    <!-- Error banner -->
+    <div *ngIf="errorMessage" class="banner error">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
 
-  <!-- Search bar -->
-  <ion-searchbar
-    [(ngModel)]="searchTerm"
-    (ionInput)="filterItems()"
-    placeholder="Search items by name">
-  </ion-searchbar>
+    <!-- Loading note -->
+    <div *ngIf="loading" class="banner loading">
+      <ion-icon name="sync-outline" class="spin"></ion-icon>
+      <span>Loading inventory from server…</span>
+    </div>
 
-  <!-- Protected record note -->
-  <ion-card class="info-card">
-    <ion-item lines="none">
-      <ion-icon name="alert-circle" slot="start" color="warning"></ion-icon>
-      <ion-label>
-        <h2>Protected record</h2>
-        <p><strong>Laptop</strong> cannot be deleted (server rule).</p>
-      </ion-label>
-    </ion-item>
-  </ion-card>
+    <!-- Search + filters card -->
+    <section class="card search-card">
+      <h2>Browse items</h2>
 
-  <!-- Error message -->
-  <ion-text color="danger" *ngIf="errorMessage">
-    <p>{{ errorMessage }}</p>
-  </ion-text>
+      <ion-item lines="none" class="search-row">
+        <ion-icon slot="start" name="search-outline"></ion-icon>
+        <ion-input
+          placeholder="Search items by name"
+          [value]="searchTerm"
+          (ionInput)="onSearchChange($event)">
+        </ion-input>
+      </ion-item>
 
-  <!-- Loading spinner -->
-  <div class="center" *ngIf="isLoading">
-    <ion-spinner></ion-spinner>
-  </div>
-
-  <!-- Empty state -->
-  <div class="center" *ngIf="!isLoading && !errorMessage && filteredItems.length === 0">
-    <ion-text color="medium">
-      <p>No items found. Try another search.</p>
-    </ion-text>
-  </div>
-
-  <!-- Item list -->
-  <ion-list *ngIf="filteredItems.length > 0">
-    <ion-item
-      *ngFor="let item of filteredItems"
-      lines="full"
-      class="item-card">
-
-      <!-- Category icon -->
-      <ion-avatar slot="start" class="category-avatar" [ngClass]="getCategoryColor(item.category)">
-        <ion-icon [name]="getCategoryIcon(item.category)"></ion-icon>
-      </ion-avatar>
-
-      <ion-label>
-        <div class="item-header">
-          <h2>{{ item.item_name || '(Unnamed item)' }}</h2>
-
-          <!-- Featured badge -->
-          <ion-chip *ngIf="item.featured_item === 1" color="secondary" outline class="featured-chip">
-            <ion-icon name="star"></ion-icon>
-            <ion-label>Featured</ion-label>
-          </ion-chip>
+      <div class="filters-row">
+        <div class="toolbar-group">
+          <label>Stock status</label>
+          <ion-segment [value]="stockFilter" (ionChange)="onStockFilterChange($event)">
+            <ion-segment-button value="all">
+              <ion-label>All</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="in">
+              <ion-label>In stock</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="limited">
+              <ion-label>Limited</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="out">
+              <ion-label>Out</ion-label>
+            </ion-segment-button>
+          </ion-segment>
         </div>
 
-        <p class="category-line">
-          {{ item.category }} • Supplier: {{ item.supplier_name || 'N/A' }}
-        </p>
+        <ion-item lines="none" class="featured-toggle">
+          <ion-label>Featured only</ion-label>
+          <ion-toggle
+            slot="end"
+            [checked]="showOnlyFeatured"
+            (ionChange)="onFeaturedToggle($event)">
+          </ion-toggle>
+        </ion-item>
+      </div>
+    </section>
 
-        <div class="meta-row">
-          <span>Price: ${{ item.price }}</span>
-          <span>Qty: {{ item.quantity }}</span>
+    <!-- Protected record note (matches slides: “protected record can’t delete”) -->
+    <section *ngIf="hasProtectedRecord" class="protected-note card">
+      <div class="protected-content">
+        <ion-icon name="warning-outline"></ion-icon>
+        <div>
+          <strong>Protected record</strong>
+          <p>
+            "{{ protectedItemName }}" can’t be deleted on the server – it is locked for
+            demo/testing purposes.
+          </p>
         </div>
+      </div>
+    </section>
 
-        <!-- Stock status chip -->
-        <ion-chip [color]="getStatusColor(item.stock_status)" class="status-chip">
-          <ion-icon name="checkmark-circle" *ngIf="item.stock_status === 'In Stock'"></ion-icon>
-          <ion-icon name="warning" *ngIf="item.stock_status === 'Low Stock'"></ion-icon>
-          <ion-icon name="close-circle" *ngIf="item.stock_status === 'Out of Stock'"></ion-icon>
-          <ion-label>{{ item.stock_status }}</ion-label>
-        </ion-chip>
+    <!-- Empty state -->
+    <section
+      *ngIf="!loading && !errorMessage && filteredItems.length === 0"
+      class="empty-state card">
+      <ion-icon name="archive-outline"></ion-icon>
+      <p>No items match your search or filters.</p>
+      <p class="small-note">Try clearing the filters, or add new items from the Manage tab.</p>
+    </section>
 
-        <!-- Optional note -->
-        <p class="note" *ngIf="item.special_note">
-          {{ item.special_note }}
+    <!-- Item cards (Campus-store style) -->
+    <section *ngIf="filteredItems.length > 0" class="items-list card">
+      <div class="table-header-row">
+        <h2>Items</h2>
+        <p class="small-note">
+          Tap **Manage** tab below to add, update, or delete items.
         </p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+      </div>
 
-  <!-- Floating Help FAB -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="openHelp()">
-      <ion-icon name="help"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+      <ion-list lines="none">
+        <ion-item *ngFor="let item of filteredItems" class="item-row">
+          <!-- Icon / category pill -->
+          <div class="item-icon-box" slot="start">
+            <ion-icon [name]="getCategoryIcon(item.category)"></ion-icon>
+          </div>
+
+          <!-- Main content -->
+          <ion-label>
+            <div class="item-title-row">
+              <div>
+                <h3>{{ item.item_name || '(Unnamed item)' }}</h3>
+                <div class="tag-row">
+                  <span class="pill category-pill">{{ item.category || 'Misc' }}</span>
+                  <span
+                    class="pill stock-pill"
+                    [ngClass]="'lvl-' + getStockStatus(item)">
+                    {{ getStockLabel(item) }}
+                  </span>
+                  <span *ngIf="item.featured_item === 1" class="pill featured-pill">
+                    Featured
+                  </span>
+                </div>
+              </div>
+
+              <div class="price-block">
+                <span class="price">\${{ item.price }}</span>
+                <span class="qty">Qty: {{ item.quantity }}</span>
+              </div>
+            </div>
+
+            <p class="meta-line">
+              ID #{{ item.item_id }} · Supplier:
+              <strong>{{ item.supplier_name || 'Unknown supplier' }}</strong>
+            </p>
+
+            <p *ngIf="item.special_note" class="note-line">
+              {{ item.special_note }}
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </section>
+
+    <!-- Help FAB (per-page help button) -->
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="openHelp()">
+        <ion-icon name="help-circle-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+  </div>
 </ion-content>
-
