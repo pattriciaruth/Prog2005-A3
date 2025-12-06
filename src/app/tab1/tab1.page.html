@@ -149,12 +149,18 @@
       </ion-list>
     </section>
 
-    <!-- Help FAB (per-page help button) -->
+    <!-- Help FAB (per-page help button) 
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
       <ion-fab-button (click)="openHelp()">
         <ion-icon name="help-circle-outline"></ion-icon>
       </ion-fab-button>
-    </ion-fab>
+    </ion-fab>-->
 
   </div>
 </ion-content>
+<!-- Floating Help Button -->
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="dark" (click)="showHelp()">
+    <ion-icon name="help-circle-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
