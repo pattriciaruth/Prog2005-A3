@@ -1,17 +1,84 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
+<ion-header>
+  <ion-toolbar class="header-bar">
+    <ion-title>Privacy & Security</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="showHelp()">
+        <ion-icon name="help-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="page-container">
 
-  <app-explore-container name="Tab 4 page"></app-explore-container>
+  <div class="content-card">
+
+    <h1>Privacy & Security Requirements<br>for Mobile Applications</h1>
+
+    <p class="intro">
+      This application manages inventory data and interacts with a remote server. 
+      As part of modern mobile development, it is essential to follow strong privacy and 
+      security practices to ensure that all user and system data is protected.
+    </p>
+
+    <!-- Section 1 -->
+    <h2>1. Secure Communication</h2>
+    <p>
+      All communication between the app and the backend must occur over 
+      <strong>HTTPS</strong> to protect data from interception or tampering. 
+      This includes all GET, POST, PUT and DELETE requests.
+    </p>
+
+    <!-- Section 2 -->
+    <h2>2. Data Validation & Sanitisation</h2>
+    <p>
+      The app ensures that all user-input fields such as item names, quantities and categories
+      are validated before being sent to the server. Input validation prevents attacks such as
+      injection, malformed data and accidental corruption of database records.
+    </p>
+
+    <!-- Section 3 -->
+    <h2>3. Restricted Access to Sensitive Operations</h2>
+    <p>
+      Updating and deleting records must be restricted to authorised users. 
+      Although this demonstration system does not implement authentication,
+      the production version would require secure login, role-based access control (RBAC),
+      and session management.
+    </p>
+
+    <!-- Section 4 -->
+    <h2>4. Avoid Storing Sensitive Data Locally</h2>
+    <p>
+      Mobile devices can be lost or compromised. Therefore, the application avoids
+      storing sensitive information on the device. Temporary cache or in-memory data structures
+      are used instead of persistent local storage.
+    </p>
+
+    <!-- Section 5 -->
+    <h2>5. API Error Handling & Safe Responses</h2>
+    <p>
+      All API responses are handled safely. Error messages are displayed to the user
+      without exposing internal server details. This prevents information leakage
+      which could be exploited by attackers.
+    </p>
+
+    <!-- Section 6 -->
+    <h2>6. Protection Against Unauthorised Deletion</h2>
+    <p>
+      The backend prevents deletion of protected items (e.g., “Laptop”) to demonstrate
+      tamper-resistant design. This aligns with secure data-handling practices
+      where critical records require elevated permissions.
+    </p>
+
+    <!-- Section 7 -->
+    <h2>7. Ethical Data Handling</h2>
+    <p>
+      User data must be treated ethically following organisational policies and
+      privacy regulations. Access should be limited to legitimate educational
+      or operational purposes only.
+    </p>
+
+  </div>
+
 </ion-content>
