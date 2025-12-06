@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import { InventoryService } from '../services/inventory.service';
 import { Item } from '../models/item';
 
@@ -26,10 +27,33 @@ export class Tab1Page implements OnInit {
   // Demo “protected” record (matches server rule)
   readonly protectedItemName = 'Laptop';
 
-  constructor(private inventoryService: InventoryService) {}
+  // 🆕 Help text just for this tab
+  readonly helpText = `
+    <strong>Browse Items page</strong><br><br>
+    • This page shows all café inventory items from the backend server.<br>
+    • Use the search box to filter items by <em>item name</em>.<br>
+    • Use the stock filter to show all, in-stock, low-stock, or out-of-stock items.<br>
+    • Turn on “Featured only” to see items marked as featured.<br>
+    • The item called <strong>“Laptop”</strong> is protected on the server and cannot be deleted.
+  `;
+
+  constructor(
+    private inventoryService: InventoryService,
+    private alertCtrl: AlertController          // 👈 inject AlertController
+  ) {}
 
   ngOnInit() {
     this.loadItems();
+  }
+
+  // 🆕 This is what your FAB calls: (click)="showHelp()"
+  async showHelp() {
+    const alert = await this.alertCtrl.create({
+      header: 'How to use this page',
+      message: this.helpText,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
   get hasProtectedRecord(): boolean {
@@ -75,16 +99,6 @@ export class Tab1Page implements OnInit {
     const checked = !!(event.detail?.checked ?? event.target?.checked);
     this.showOnlyFeatured = checked;
     this.applyFilters();
-  }
-
-  openHelp() {
-    // Simple placeholder – you can replace with an Action Sheet later
-    alert(
-      'Browse items help:\n\n' +
-      '• Search items by name\n' +
-      '• Filter by stock status or featured items\n' +
-      '• The “Laptop” record is protected and cannot be deleted.'
-    );
   }
 
   // --- Helpers -------------------------------------------------------------

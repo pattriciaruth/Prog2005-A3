@@ -1,0 +1,50 @@
+/* Header */
+.header-bar {
+  --background: #f6efe7;
+  --color: #4b2e13;
+  border-bottom: 1px solid #eadfce;
+}
+
+/* Page Layout */
+.page-container {
+  --background: #f8f4ef;
+  padding: 1.2rem;
+}
+
+.content-card {
+  background: #ffffff;
+  padding: 1.8rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e8ddcd;
+}
+
+/* Typography */
+h1 {
+  font-size: 1.7rem;
+  margin-bottom: 1rem;
+  color: #4b2e13;
+}
+
+h2 {
+  margin-top: 1.4rem;
+  font-size: 1.2rem;
+  color: #7e0791;
+}
+
+.intro {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #504a45;
+}
+
+p {
+  color: #4a4640;
+  line-height: 1.5;
+  margin-top: 0.4rem;
+}
+
+/* Help icon button */
+ion-button {
+  --color: #4b2e13;
+}
