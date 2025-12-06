@@ -2,11 +2,7 @@
   <ion-toolbar class="header-bar">
     <ion-title>Privacy & Security</ion-title>
 
-    <ion-buttons slot="end">
-      <ion-button (click)="showHelp()">
-        <ion-icon name="help-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    
   </ion-toolbar>
 </ion-header>
 
@@ -82,3 +78,10 @@
   </div>
 
 </ion-content>
+
+<!-- Floating Help Button -->
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="dark" (click)="showHelp()">
+    <ion-icon name="help-circle-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
