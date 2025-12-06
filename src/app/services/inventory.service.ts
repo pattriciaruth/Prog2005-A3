@@ -40,6 +40,15 @@ export class InventoryService {
   }
 
   /**
+   * Alias used by Tab2: createItem()
+   * (so your existing code this.inventoryService.createItem(...).subscribe() keeps working)
+   */
+  createItem(item: Item): Observable<any> {
+    // Just reuse addItem so you don't duplicate logic
+    return this.addItem(item);
+  }
+
+  /**
    * Update an existing café item by name.
    * PUT /name
    */
