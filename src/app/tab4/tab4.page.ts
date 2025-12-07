@@ -21,11 +21,15 @@ export class Tab4Page {
 }
 
 helpText = `
-• This page displays all items currently stored in the inventory database.<br><br>
-• Tap an item to view its details (optional feature).<br>
-• Use the search bar to quickly locate items by name.<br>
-• Pull down to refresh the list at any time.<br><br>
-Note: Items come directly from the backend server.
+Privacy & Security Page
+• This page explains how the café inventory app handles data, protects records, and maintains secure operations.
+• No personal information, customer data, or user accounts are stored or processed in this app — only inventory items such as names, categories, quantities, suppliers, and stock levels.
+• All data operations (viewing, adding, updating, or deleting items) communicate only with the provided backend server using simple REST API requests. 
+• The system prevents accidental removal of certain protected items. For example, the item named "Laptop" is locked on the server and cannot be deleted. 
+• Inventory changes are validated before sending requests to the server to ensure data consistency and prevent invalid or corrupted entries. 
+• Users should avoid sharing sensitive information in item descriptions or notes, as this app is for inventory records only, not personal data storage. 
+• For security, all actions are logged server-side, and only legitimate CRUD operations are allowed through approved endpoints. 
+• If you experience errors or unexpected behaviour, refresh the page and try again — this ensures the latest data is fetched securely from the server.
 `;
 
 }
