@@ -51,10 +51,10 @@ export class Tab2Page implements OnInit {
 
   // ---------- Help text for this tab ---------------------------------------
   readonly helpText = `
-    • Use this form to add a new item to the inventory.<br><br>
-    • All fields marked with * are required before submitting.<br>
-    • Quantity and Price must be non-negative numbers.<br>
-    • Use the Category and Stock status dropdowns to classify the item.<br>
+    • Use this form to add a new item to the inventory. 
+    • All fields marked with * are required before submitting. 
+    • Quantity and Price must be non-negative numbers. 
+    • Use the Category and Stock status dropdowns to classify the item. 
     • Tick “Mark as featured item” to show it in the Featured list on the right
       and on the Browse tab.
   `;

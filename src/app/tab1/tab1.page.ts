@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonicSafeString } from '@ionic/angular';
 import { InventoryService } from '../services/inventory.service';
 import { Item } from '../models/item';
 
@@ -27,34 +27,33 @@ export class Tab1Page implements OnInit {
   // Demo “protected” record (matches server rule)
   readonly protectedItemName = 'Laptop';
 
-  // 🆕 Help text just for this tab
-  readonly helpText = `
-    <strong>Browse Items page</strong><br><br>
-    • This page shows all café inventory items from the backend server.<br>
-    • Use the search box to filter items by <em>item name</em>.<br>
-    • Use the stock filter to show all, in-stock, low-stock, or out-of-stock items.<br>
-    • Turn on “Featured only” to see items marked as featured.<br>
-    • The item called <strong>“Laptop”</strong> is protected on the server and cannot be deleted.
-  `;
+  
 
   constructor(
     private inventoryService: InventoryService,
-    private alertCtrl: AlertController          // 👈 inject AlertController
+    private alertCtrl: AlertController          
   ) {}
 
   ngOnInit() {
     this.loadItems();
   }
 
-  // 🆕 This is what your FAB calls: (click)="showHelp()"
-  async showHelp() {
-    const alert = await this.alertCtrl.create({
-      header: 'How to use this page',
-      message: this.helpText,
-      buttons: ['OK']
-    });
-    await alert.present();
-  }
+async showHelp() {
+  const alert = await this.alertCtrl.create({
+    header: 'How to Use This Page',
+    message: this.helpText,
+    buttons: ['OK']
+  });
+  await alert.present();
+}
+
+helpText = `
+• This page displays all items currently stored in the inventory database.                                                                                   
+• Use the search bar to quickly locate items by name.                
+• Pull down to refresh the list at any time.                  
+Note: Items come directly from the backend server.                       
+`;
+
 
   get hasProtectedRecord(): boolean {
     return this.items.some(

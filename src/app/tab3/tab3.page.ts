@@ -87,10 +87,10 @@ export class Tab3Page {
 
   // help text
   readonly helpText = `
-    • Search for an item by its exact name, then press <strong>Load item</strong>.<br><br>
-    • The current record details appear on the left and the form on the right is filled in.<br>
-    • Edit any fields and press <strong>Save changes</strong> to update.<br>
-    • Use <strong>Delete item</strong> to remove it (except the protected “Laptop” record).
+    • Search for an item by its exact name, then press  Load item . 
+    • The current record details appear on the left and the form on the right is filled in. 
+    • Edit any fields and press  Save changes  to update. 
+    • Use <strong>Delete item to remove it (except the protected “Laptop” record).
   `;
 
   constructor(
