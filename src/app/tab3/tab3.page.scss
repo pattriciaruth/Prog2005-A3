@@ -1,226 +1,252 @@
+:host {
+  display: block; /* Ensures this component behaves as a block-level container */
+}
 
+/* -------------------------------------------------------------------
+   PAGE BACKGROUND + SPACE FOR BOTTOM TAB BAR + FLOATING HELP BUTTON
+   -------------------------------------------------------------------
+   --padding-bottom ensures content never hides behind the tab bar
+   and provides room for the Help FAB to float above it.
+-------------------------------------------------------------------- */
+ion-content {
+  --background: #f5f0e8;
+  --padding-bottom: 5.5rem;
+}
 
+/* -------------------------------------------------------------------
+   PAGE HEADER AREA
+   Shared visual style used across all tabs for consistency.
+-------------------------------------------------------------------- */
+.app-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
 
+.app-header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
 
+.subtitle {
+  margin: 0.2rem 0 0;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
 
+/* -------------------------------------------------------------------
+   MAIN CONTENT CONTAINER
+   Centers content and limits max width for readability.
+-------------------------------------------------------------------- */
+.app-main {
+  max-width: 1100px;
+  margin: 1.5rem auto;
+  padding: 0 1.5rem;
+}
 
+/* -------------------------------------------------------------------
+   GRID LAYOUT
+   Two-column layout:
+   LEFT = Search + Current record
+   RIGHT = Edit/Delete form
+   Collapses to single column on small screens.
+-------------------------------------------------------------------- */
+.manage-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: flex-start;
+}
 
+/* -------------------------------------------------------------------
+   CARD COMPONENTS USED ON BOTH SIDES
+   Consistent shadows, borders, and padding used in all tabs.
+-------------------------------------------------------------------- */
+.form-box,
+.card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1.25rem 1.6rem 1.6rem;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+  border: 1px solid #f1e4d3;
+}
 
+.form-box h3,
+.search-card h2 {
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+}
 
-// **********************************
-// ⭐⭐-------DO NOT CHNAGE OR DELET ANY OF THE FOLLOWING LINES. YOUR CODE GOES ABOVE THIS GREEN SECTION-------⭐⭐
-// **********************************
+/* -------------------------------------------------------------------
+   FEEDBACK BANNERS
+   Error and success messages shown after item actions.
+-------------------------------------------------------------------- */
+.banner {
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.6rem;
+}
 
+.banner.error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}
 
+.banner.success {
+  background: #ecfdf3;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
 
+.banner ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
 
+.small-note {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
 
+/* -------------------------------------------------------------------
+   FORM INPUTS
+   Clean rounded inputs with purple focus ring (consistent with Tab 2)
+-------------------------------------------------------------------- */
+label {
+  display: block;
+  font-weight: 600;
+  margin-top: 0.6rem;
+  margin-bottom: 0.1rem;
+}
 
-// :host {
-//   display: block;
-// }
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #d4c6b8;
+  font: inherit;
+  background: #fdfbf7;
+}
 
-// /* Background + bottom padding for FAB & tab bar */
-// ion-content {
-//   --background: #f5f0e8;
-//   --padding-bottom: 5.5rem;
-// }
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.16);
+}
 
-// .app-header {
-//   padding: 1rem 1.5rem;
-//   border-bottom: 1px solid #e0e0e0;
-//   display: flex;
-//   flex-wrap: wrap;
-//   justify-content: space-between;
-//   align-items: center;
-//   gap: 0.75rem;
-// }
+/* -------------------------------------------------------------------
+   CHECKBOX ROW STYLING
+-------------------------------------------------------------------- */
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0.6rem;
+}
 
-// .app-header h1 {
-//   margin: 0;
-//   font-size: 1.4rem;
-// }
+.checkbox-row input {
+  width: auto;
+}
 
-// .subtitle {
-//   margin: 0.2rem 0 0;
-//   font-size: 0.9rem;
-//   color: #6b7280;
-// }
+.checkbox-row label {
+  margin-top: 0;
+  font-weight: 500;
+}
 
-// .app-main {
-//   max-width: 1100px;
-//   margin: 1.5rem auto;
-//   padding: 0 1.5rem;
-// }
+/* -------------------------------------------------------------------
+   BUTTON ROWS
+   Includes Save, Delete, Load, Clear buttons.
+-------------------------------------------------------------------- */
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
 
-// /* Layout */
-// .manage-layout {
-//   display: grid;
-//   grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
-//   gap: 1.75rem;
-//   align-items: flex-start;
-// }
+button {
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  background: #7c3aed;
+  color: #ffffff;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
 
-// /* Cards */
-// .form-box,
-// .card {
-//   background: #ffffff;
-//   border-radius: 14px;
-//   padding: 1.25rem 1.6rem 1.6rem;
-//   box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
-//   border: 1px solid #f1e4d3;
-// }
+button:hover {
+  background: #6d28d9;
+  transform: translateY(-1px);
+}
 
-// .form-box h3,
-// .search-card h2 {
-//   margin-top: 0;
-//   margin-bottom: 0.8rem;
-// }
+/* Subtle neutral button used for clearing forms */
+button.ghost {
+  background: transparent;
+  color: #4b5563;
+  border: 1px solid #d4c6b8;
+}
 
-// /* Messages */
-// .banner {
-//   border-radius: 8px;
-//   padding: 0.55rem 0.75rem;
-//   font-size: 0.85rem;
-//   margin-bottom: 0.6rem;
-// }
+button.ghost:hover {
+  background: #f5f0e8;
+}
 
-// .banner.error {
-//   background: #fef2f2;
-//   border: 1px solid #fecaca;
-//   color: #b91c1c;
-// }
+/* Red destructive button for Delete action */
+button.danger {
+  background: #dc2626;
+}
 
-// .banner.success {
-//   background: #ecfdf3;
-//   border: 1px solid #bbf7d0;
-//   color: #166534;
-// }
+button.danger:hover {
+  background: #b91c1c;
+}
 
-// .banner ul {
-//   margin: 0;
-//   padding-left: 1.1rem;
-// }
+/* -------------------------------------------------------------------
+   QUICK PREVIEW (LEFT PANEL)
+   Used for showing loaded item details before editing.
+-------------------------------------------------------------------- */
+.quick-preview {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed #e5d6c3;
+  font-size: 0.9rem;
+}
 
-// .small-note {
-//   font-size: 0.8rem;
-//   color: #6b7280;
-// }
+.quick-preview h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+}
 
-// /* Labels & inputs */
-// label {
-//   display: block;
-//   font-weight: 600;
-//   margin-top: 0.6rem;
-//   margin-bottom: 0.1rem;
-// }
+/* -------------------------------------------------------------------
+   RESPONSIVE BEHAVIOUR
+   Switches to a single column layout on tablets/phones.
+-------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .manage-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 
-// input,
-// select,
-// textarea {
-//   width: 100%;
-//   padding: 0.45rem 0.6rem;
-//   border-radius: 8px;
-//   border: 1px solid #d4c6b8;
-//   font: inherit;
-//   background: #fdfbf7;
-// }
+/* -------------------------------------------------------------------
+   FLOATING HELP BUTTON
+   Positioned above the bottom tab bar for visibility.
+-------------------------------------------------------------------- */
+ion-fab.help-fab {
+  bottom: 5.5rem; /* matches ion-content padding for perfect alignment */
+}
 
-// input:focus,
-// select:focus,
-// textarea:focus {
-//   outline: none;
-//   border-color: #7c3aed;
-//   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.16);
-// }
-
-// /* Checkbox row */
-// .checkbox-row {
-//   display: flex;
-//   align-items: center;
-//   gap: 8px;
-//   margin-top: 0.6rem;
-// }
-
-// .checkbox-row input {
-//   width: auto;
-// }
-
-// .checkbox-row label {
-//   margin-top: 0;
-//   font-weight: 500;
-// }
-
-// /* Buttons */
-// .button-row {
-//   display: flex;
-//   flex-wrap: wrap;
-//   gap: 0.5rem;
-//   margin-top: 1rem;
-// }
-
-// button {
-//   padding: 0.45rem 1rem;
-//   border-radius: 999px;
-//   border: none;
-//   cursor: pointer;
-//   font-weight: 500;
-//   font-size: 0.9rem;
-//   background: #7c3aed;
-//   color: #ffffff;
-//   transition: background 0.15s ease, transform 0.05s ease;
-// }
-
-// button:hover {
-//   background: #6d28d9;
-//   transform: translateY(-1px);
-// }
-
-// button.ghost {
-//   background: transparent;
-//   color: #4b5563;
-//   border: 1px solid #d4c6b8;
-// }
-
-// button.ghost:hover {
-//   background: #f5f0e8;
-// }
-
-// button.danger {
-//   background: #dc2626;
-// }
-
-// button.danger:hover {
-//   background: #b91c1c;
-// }
-
-// /* Quick preview on left */
-// .quick-preview {
-//   margin-top: 1rem;
-//   padding-top: 0.75rem;
-//   border-top: 1px dashed #e5d6c3;
-//   font-size: 0.9rem;
-// }
-
-// .quick-preview h3 {
-//   margin: 0 0 0.4rem;
-//   font-size: 0.95rem;
-// }
-
-// /* Responsive */
-// @media (max-width: 900px) {
-//   .manage-layout {
-//     grid-template-columns: minmax(0, 1fr);
-//   }
-// }
-
-// /* FAB styling */
-// ion-fab.help-fab {
-//   bottom: 5.5rem; /* sits above bottom tab bar */
-// }
-
-// ion-fab-button {
-//   --background: #7c3aed;
-//   --background-activated: #6d28d9;
-//   --background-hover: #6d28d9;
-// }
+ion-fab-button {
+  --background: #7c3aed;
+  --background-activated: #6d28d9;
+  --background-hover: #6d28d9;
+}

@@ -1,15 +1,29 @@
+<!-- ============================================================
+     PAGE HEADER
+     Displays the title for the Privacy & Security section.
+=============================================================== -->
 <ion-header>
   <ion-toolbar class="header-bar">
     <ion-title>Privacy & Security</ion-title>
-
-    
   </ion-toolbar>
 </ion-header>
 
+<!-- ============================================================
+     MAIN SCROLLABLE CONTENT AREA
+     Contains the explanatory sections for security requirements.
+=============================================================== -->
 <ion-content class="page-container">
 
+  <!-- ------------------------------------------------------------
+       WRAPPED CONTENT CARD
+       Provides consistent padding and card-style appearance
+       matching other informational pages.
+  -------------------------------------------------------------- -->
   <div class="content-card">
 
+    <!-- ----------------------------------------------------------
+         PAGE TITLE + INTRODUCTION
+    ----------------------------------------------------------- -->
     <h1>Privacy & Security Requirements<br>for Mobile Applications</h1>
 
     <p class="intro">
@@ -18,7 +32,9 @@
       security practices to ensure that all user and system data is protected.
     </p>
 
-    <!-- Section 1 -->
+    <!-- ----------------------------------------------------------
+         SECTION 1 — HTTPS / Secure Communication
+    ----------------------------------------------------------- -->
     <h2>1. Secure Communication</h2>
     <p>
       All communication between the app and the backend must occur over 
@@ -26,7 +42,9 @@
       This includes all GET, POST, PUT and DELETE requests.
     </p>
 
-    <!-- Section 2 -->
+    <!-- ----------------------------------------------------------
+         SECTION 2 — Input Validation
+    ----------------------------------------------------------- -->
     <h2>2. Data Validation & Sanitisation</h2>
     <p>
       The app ensures that all user-input fields such as item names, quantities and categories
@@ -34,7 +52,9 @@
       injection, malformed data and accidental corruption of database records.
     </p>
 
-    <!-- Section 3 -->
+    <!-- ----------------------------------------------------------
+         SECTION 3 — Restricted Access / Authentication
+    ----------------------------------------------------------- -->
     <h2>3. Restricted Access to Sensitive Operations</h2>
     <p>
       Updating and deleting records must be restricted to authorised users. 
@@ -43,7 +63,9 @@
       and session management.
     </p>
 
-    <!-- Section 4 -->
+    <!-- ----------------------------------------------------------
+         SECTION 4 — Local Storage Safety
+    ----------------------------------------------------------- -->
     <h2>4. Avoid Storing Sensitive Data Locally</h2>
     <p>
       Mobile devices can be lost or compromised. Therefore, the application avoids
@@ -51,7 +73,9 @@
       are used instead of persistent local storage.
     </p>
 
-    <!-- Section 5 -->
+    <!-- ----------------------------------------------------------
+         SECTION 5 — Safe Error Handling
+    ----------------------------------------------------------- -->
     <h2>5. API Error Handling & Safe Responses</h2>
     <p>
       All API responses are handled safely. Error messages are displayed to the user
@@ -59,7 +83,10 @@
       which could be exploited by attackers.
     </p>
 
-    <!-- Section 6 -->
+    <!-- ----------------------------------------------------------
+         SECTION 6 — Protected Records
+         Linked to Tab 3’s undeletable “Laptop” example.
+    ----------------------------------------------------------- -->
     <h2>6. Protection Against Unauthorised Deletion</h2>
     <p>
       The backend prevents deletion of protected items (e.g., “Laptop”) to demonstrate
@@ -67,7 +94,10 @@
       where critical records require elevated permissions.
     </p>
 
-    <!-- Section 7 -->
+    <!-- ----------------------------------------------------------
+         SECTION 7 — Ethical Data Handling
+         Aligns with organisational and legal privacy policies.
+    ----------------------------------------------------------- -->
     <h2>7. Ethical Data Handling</h2>
     <p>
       User data must be treated ethically following organisational policies and
@@ -76,10 +106,12 @@
     </p>
 
   </div>
-
 </ion-content>
 
-<!-- Floating Help Button -->
+<!-- ============================================================
+     FLOATING HELP BUTTON
+     Opens a quick explanation or definitions for privacy concepts.
+=============================================================== -->
 <ion-fab vertical="bottom" horizontal="end" slot="fixed">
   <ion-fab-button color="dark" (click)="showHelp()">
     <ion-icon name="help-circle-outline"></ion-icon>

@@ -1,17 +1,21 @@
+/* Host element ensures the page component behaves as a block container */
 :host {
   display: block;
 }
 
-/* Page background */
+/* Background color for the entire scrollable content area */
 ion-content {
   --background: #f5f0e8;
 }
 
-/* Header area (similar to app-header from A2) */
+/* ---------------------------------------------------------
+   HEADER STYLES
+   Styles the top bar area containing title + item count
+--------------------------------------------------------- */
 .app-header {
   padding: 0.8rem 1.2rem;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap;           /* allows wrapping on small screens */
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
@@ -28,19 +32,24 @@ ion-content {
   color: #6b7280;
 }
 
+/* Area that holds the item count badge */
 .header-meta {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
+/* Main wrapper controlling horizontal max-width + spacing */
 .app-main {
   max-width: 1100px;
-  margin: 1.25rem auto 2.5rem;
+  margin: 1.25rem auto 2.5rem; /* center + spacing below */
   padding: 0 1.25rem 2rem;
 }
 
-/* Generic card style */
+/* ---------------------------------------------------------
+   CARD COMPONENT (shared layout)
+   Used for search area, results, empty state, etc.
+--------------------------------------------------------- */
 .card {
   background: #ffffff;
   border-radius: 14px;
@@ -55,7 +64,10 @@ ion-content {
   font-size: 1.1rem;
 }
 
-/* Banners / messages */
+/* ---------------------------------------------------------
+   BANNERS: ERROR + LOADING
+   Used for feedback messages at the top of the page
+--------------------------------------------------------- */
 .banner {
   border-radius: 8px;
   padding: 0.55rem 0.8rem;
@@ -66,18 +78,21 @@ ion-content {
   margin-bottom: 0.7rem;
 }
 
+/* Validation / server errors */
 .banner.error {
   background: #fef2f2;
   border: 1px solid #fecaca;
   color: #b91c1c;
 }
 
+/* Loading indicator (spinner + text) */
 .banner.loading {
   background: #eff6ff;
   border: 1px solid #bfdbfe;
   color: #1d4ed8;
 }
 
+/* Rotating icon animation for loading banner */
 .banner .spin {
   animation: spin 0.9s linear infinite;
 }
@@ -88,21 +103,27 @@ ion-content {
   }
 }
 
-/* Search + filters */
+/* ---------------------------------------------------------
+   SEARCH BAR + FILTER CONTROLS
+--------------------------------------------------------- */
+
+/* Search bar wrapper */
 .search-row {
   --padding-start: 0;
   --inner-padding-end: 0;
   background: #fdfbf7;
-  border-radius: 999px;
+  border-radius: 999px; /* pill shape */
   border: 1px solid #d4c6b8;
   margin-bottom: 0.75rem;
 }
 
+/* Search icon styling */
 .search-row ion-icon {
   margin-left: 0.75rem;
   color: #6b7280;
 }
 
+/* Wrapper for the filter widgets */
 .filters-row {
   display: flex;
   flex-wrap: wrap;
@@ -111,6 +132,7 @@ ion-content {
   margin-top: 0.25rem;
 }
 
+/* Stock filter segment block */
 .toolbar-group {
   flex: 1 1 220px;
   display: flex;
@@ -123,6 +145,7 @@ ion-content {
   font-weight: 600;
 }
 
+/* Featured-only toggle styling */
 .featured-toggle {
   --padding-start: 0.6rem;
   --inner-padding-end: 0.4rem;
@@ -133,7 +156,9 @@ ion-content {
   font-size: 0.85rem;
 }
 
-/* Protected note */
+/* ---------------------------------------------------------
+   PROTECTED RECORD NOTICE
+--------------------------------------------------------- */
 .protected-note .protected-content {
   display: flex;
   gap: 0.7rem;
@@ -143,14 +168,16 @@ ion-content {
 
 .protected-note ion-icon {
   font-size: 1.4rem;
-  color: #b45309;
+  color: #b45309; /* amber/brown warning */
 }
 
 .protected-note p {
   margin: 0.1rem 0 0;
 }
 
-/* Empty state */
+/* ---------------------------------------------------------
+   EMPTY STATE APPEARANCE
+--------------------------------------------------------- */
 .empty-state {
   text-align: center;
   padding-top: 1.4rem;
@@ -168,11 +195,15 @@ ion-content {
   color: #6b7280;
 }
 
-/* Item list (campus-store style cards) */
+/* ---------------------------------------------------------
+   ITEM LIST (Campus-store style)
+   Each item displays title, tags, supplier, price, quantity, etc.
+--------------------------------------------------------- */
 .items-list {
   padding-top: 1rem;
 }
 
+/* Header row above list */
 .table-header-row {
   display: flex;
   justify-content: space-between;
@@ -190,6 +221,7 @@ ion-content {
   color: #6b7280;
 }
 
+/* Individual item container */
 .item-row {
   margin-bottom: 0.6rem;
   border-radius: 12px;
@@ -198,7 +230,9 @@ ion-content {
   --inner-padding-end: 0.9rem;
 }
 
-/* Left icon column */
+/* ---------------------------------------------------------
+   ITEM ICON BOX (left icon)
+--------------------------------------------------------- */
 .item-icon-box {
   width: 40px;
   height: 40px;
@@ -212,10 +246,12 @@ ion-content {
 
 .item-icon-box ion-icon {
   font-size: 1.4rem;
-  color: #5b21b6;
+  color: #5b21b6; /* violet */
 }
 
-/* Title + tags + price block */
+/* ---------------------------------------------------------
+   ITEM TITLE + TAGS + PRICE
+--------------------------------------------------------- */
 .item-title-row {
   display: flex;
   justify-content: space-between;
@@ -228,12 +264,14 @@ ion-content {
   font-size: 1rem;
 }
 
+/* Category + Stock + Featured badges */
 .tag-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
 }
 
+/* Base pill style */
 .pill {
   display: inline-block;
   padding: 0.1rem 0.45rem;
@@ -243,16 +281,19 @@ ion-content {
   color: #111827;
 }
 
+/* Category pill theme */
 .category-pill {
   background: #f9efe0;
   color: #7c2d12;
 }
 
+/* Stock pill default */
 .stock-pill {
   background: #e5e7eb;
   color: #111827;
 }
 
+/* Stock level statuses (dynamic classes from TS) */
 .stock-pill.lvl-in {
   background: #dcfce7;
   color: #166534;
@@ -268,11 +309,13 @@ ion-content {
   color: #b91c1c;
 }
 
+/* Featured tag */
 .featured-pill {
   background: #f3e8ff;
   color: #6d28d9;
 }
 
+/* Price + Qty block */
 .price-block {
   text-align: right;
   min-width: 80px;
@@ -288,28 +331,32 @@ ion-content {
   color: #6b7280;
 }
 
-/* Meta + note lines */
+/* Metadata (ID + supplier) */
 .meta-line {
   margin: 0.4rem 0 0.1rem;
   font-size: 0.85rem;
   color: #4b5563;
 }
 
+/* Optional special note */
 .note-line {
   margin: 0;
   font-size: 0.82rem;
   color: #6b7280;
 }
 
-/* Help FAB */
+/* ---------------------------------------------------------
+   HELP BUTTON (FAB)
+   Floating help button styling (icon + colors)
+--------------------------------------------------------- */
 ion-fab-button {
   --background: #7c3aed;
   --background-activated: #6d28d9;
   --background-hover: #6d28d9;
 }
 
+/* Styling for help alert content */
 .help-alert .alert-message {
-  
   font-size: 0.95rem;
   line-height: 1.4rem;
   color: #333;

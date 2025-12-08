@@ -1,35 +1,12 @@
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss'],
-  standalone: false,
-})
-export class Tab2Page {
-  
-}
-
-
-
-
-
-
-
-
-/*
-
-**********************************
-⭐⭐-------DO NOT CHNAGE OR DELET ANY OF THE FOLLOWING LINES. YOUR CODE GOES ABOVE THIS GREEN SECTION-------⭐⭐
-**********************************
-
-
-
 import { Component, OnInit } from '@angular/core';
 import { InventoryService } from '../services/inventory.service';
 import { Item } from '../models/item';
 import { AlertController } from '@ionic/angular';
 
+/**
+ * Shape of the reactive form model used in the template.
+ * Mirrors the fields required to create an Item.
+ */
 interface ItemForm {
   item_name: string;
   category: string;
@@ -50,6 +27,10 @@ interface ItemForm {
 export class Tab2Page implements OnInit {
 
   // ---------- Help text for this tab ---------------------------------------
+  /**
+   * Text content shown in the help popup when the floating help
+   * button is pressed. Explains how to use the Manage Items form.
+   */
   readonly helpText = `
     • Use this form to add a new item to the inventory. 
     • All fields marked with * are required before submitting. 
@@ -60,6 +41,10 @@ export class Tab2Page implements OnInit {
   `;
 
   // ---------- Form model ---------------------------------------------------
+  /**
+   * Form state bound via ngModel in the template.
+   * Initial values match common defaults (e.g., Electronics, In Stock).
+   */
   form: ItemForm = {
     item_name: '',
     category: 'Electronics',
@@ -71,28 +56,52 @@ export class Tab2Page implements OnInit {
     special_note: ''
   };
 
+  /** Indicates whether a submit request is currently in progress. */
   submitting = false;
+
+  /** Message displayed when the form submission succeeds. */
   successMessage = '';
+
+  /** Message displayed when a server or submission error occurs. */
   errorMessage = '';
+
+  /** List of validation error strings to show above the form. */
   validationErrors: string[] = [];
 
   // ---------- Featured items list -----------------------------------------
+  /**
+   * Items that are currently marked as featured in the inventory.
+   * Displayed in the right-hand table to give immediate feedback.
+   */
   featuredItems: Item[] = [];
+
+  /** Shows loading state while featured items are being fetched. */
   loadingFeatured = false;
 
+  /** Allowed category options for the dropdown. */
   readonly category = ['Electronics', 'Furniture', 'Clothing', 'Tools', 'Miscellaneous'];
+
+  /** Allowed stock status options for the dropdown. */
   readonly stock_status = ['In Stock', 'Low Stock', 'Out of Stock'];
 
   constructor(
-    private inventoryService: InventoryService,
-    private alertCtrl: AlertController
+    private inventoryService: InventoryService,  // Service to call backend API
+    private alertCtrl: AlertController           // Used to present Ionic alerts
   ) {}
 
+  /**
+   * Lifecycle hook – called once when the component is initialised.
+   * Loads the featured items so the right-hand table is populated.
+   */
   ngOnInit(): void {
     this.loadFeaturedItems();
   }
 
   // ---------- Help FAB handler --------------------------------------------
+  /**
+   * Opens a simple help dialog explaining how to use the Manage Items tab.
+   * Triggered when the floating help button is pressed.
+   */
   async openHelp(): Promise<void> {
     const alert = await this.alertCtrl.create({
       header: 'How to use "Manage Items"',
@@ -103,6 +112,11 @@ export class Tab2Page implements OnInit {
   }
 
   // ---------- Load featured items -----------------------------------------
+  /**
+   * Retrieves all items from the backend and filters down to only those
+   * that are flagged as featured_item === 1. These are shown in the
+   * "Featured items" table on the right.
+   */
   loadFeaturedItems(): void {
     this.loadingFeatured = true;
     this.inventoryService.getItems().subscribe({
@@ -118,15 +132,24 @@ export class Tab2Page implements OnInit {
   }
 
   // ---------- Form submit --------------------------------------------------
+  /**
+   * Called when the user submits the Add item form.
+   * - Clears any previous messages
+   * - Runs client-side validation
+   * - Sends a createItem request if valid
+   * - Refreshes the featured items list after success
+   */
   onSubmit(): void {
     this.successMessage = '';
     this.errorMessage = '';
     this.validationErrors = [];
 
+    // Run validation before sending data to the server
     if (!this.validateForm()) {
       return;
     }
 
+    // Build the payload in the shape expected by the backend
     const payload: Item = {
       item_id: 0, // server auto-increments; this value is ignored
       item_name: this.form.item_name.trim(),
@@ -149,7 +172,7 @@ export class Tab2Page implements OnInit {
         this.submitting = false;
         this.successMessage = 'Item created successfully.';
         this.resetForm();
-        this.loadFeaturedItems();
+        this.loadFeaturedItems();   // Refresh featured list to include the new item
       },
       error: (err: any) => {
         console.error('Error creating item', err);
@@ -160,6 +183,11 @@ export class Tab2Page implements OnInit {
   }
 
   // ---------- Validation ---------------------------------------------------
+  /**
+   * Basic client-side validation for the form fields.
+   * Populates validationErrors with user-friendly messages and
+   * returns true if the form is valid.
+   */
   private validateForm(): boolean {
     const errors: string[] = [];
 
@@ -199,6 +227,11 @@ export class Tab2Page implements OnInit {
   }
 
   // ---------- Reset form ---------------------------------------------------
+  /**
+   * Resets the form back to its initial state.
+   * Typically called after a successful submission or when the user
+   * clicks the "Clear" button.
+   */
   resetForm(): void {
     this.form = {
       item_name: '',
@@ -213,12 +246,15 @@ export class Tab2Page implements OnInit {
   }
 
   // ---------- Featured list helpers ---------------------------------------
+  /**
+   * Maps an item's stock_status to a CSS class used to colour the
+   * badge in the Featured items table.
+   */
   getStockBadgeClass(item: Item): string {
     const status = (item.stock_status || '').toLowerCase();
-    if (status.includes('out')) return 'lvl-1';
-    if (status.includes('low')) return 'lvl-2';
-    if (status.includes('in')) return 'lvl-4';
+    if (status.includes('out')) return 'lvl-1';  // low / out-of-stock
+    if (status.includes('low')) return 'lvl-2';  // limited stock
+    if (status.includes('in')) return 'lvl-4';   // healthy stock
     return '';
   }
 }
-*/

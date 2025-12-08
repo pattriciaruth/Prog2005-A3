@@ -1,236 +1,265 @@
+<!-- ================================================================
+     HEADER SECTION
+     Displays the title and description for the Update/Delete tab
+================================================================ -->
+<ion-header translucent="true">
+  <ion-toolbar>
+    <div class="app-header">
+      <div>
+        <h1>Update & Remove Items</h1>
+        <p class="subtitle">
+          Search by item name, edit details, or remove records from the inventory.
+        </p>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
 
+<!-- ================================================================
+     MAIN PAGE CONTENT
+================================================================ -->
+<ion-content [fullscreen]="true">
 
+  <div class="app-main">
 
+    <!-- ------------------------------------------------------------
+         FEEDBACK BANNERS
+         Success and error messages displayed after actions
+    --------------------------------------------------------------- -->
+    <div *ngIf="errorMessage" class="banner error">
+      {{ errorMessage }}
+    </div>
 
+    <div *ngIf="successMessage" class="banner success">
+      {{ successMessage }}
+    </div>
 
+    <!-- =============================================================
+         GRID LAYOUT
+         LEFT  = Search & view loaded record
+         RIGHT = Edit / Delete form
+    ================================================================ -->
+    <div class="manage-layout">
 
+      <!-- ===========================================================
+           LEFT COLUMN: SEARCH PANEL
+           Search for an existing item by its exact name
+      ============================================================ -->
+      <section class="card search-panel">
 
+        <h2>Find item by name</h2>
+        <p class="small-note">
+          Type the exact item name stored on the server, then load it for editing.
+        </p>
 
+        <!-- Search bar -->
+        <label for="searchName">Item name</label>
+        <input
+          id="searchName"
+          type="text"
+          [(ngModel)]="searchName"
+        />
 
+        <!-- Search + Clear buttons -->
+        <div class="button-row">
+          <button type="button" (click)="onLoadItem()" [disabled]="loadingLookup">
+            {{ loadingLookup ? 'Loading…' : 'Load item' }}
+          </button>
 
+          <button
+            type="button"
+            class="ghost"
+            (click)="resetForm(); currentItem = null; searchName = ''; successMessage=''; errorMessage='';"
+            [disabled]="loadingLookup || submittingUpdate || submittingDelete"
+          >
+            Clear
+          </button>
+        </div>
 
+        <!-- Current item preview -->
+        <h3 class="panel-title">Current record</h3>
 
+        <!-- Message when no item is loaded -->
+        <p *ngIf="!currentItem" class="empty-note">
+          No item loaded yet. Search by name and click
+          <strong>Load item</strong>.
+        </p>
 
-<!--
+        <!-- Summary of currently loaded item -->
+        <div *ngIf="currentItem" class="current-record">
+          <p><strong>ID:</strong> {{ currentItem.item_id }}</p>
+          <p><strong>Name:</strong> {{ currentItem.item_name }}</p>
+          <p><strong>Category:</strong> {{ currentItem.category }}</p>
+          <p><strong>Status:</strong> {{ currentItem.stock_status }}</p>
 
-**********************************
-⭐⭐-------DO NOT CHNAGE OR DELET ANY OF THE FOLLOWING LINES. YOUR CODE GOES ABOVE THIS GREEN SECTION-------⭐⭐
-**********************************
+          <p>
+            <strong>Qty:</strong> {{ currentItem.quantity }}
+            &nbsp;|&nbsp;
+            <strong>Price:</strong> ${{ currentItem.price }}
+          </p>
 
--->
+          <p *ngIf="currentItem.special_note">
+            <strong>Note:</strong> {{ currentItem.special_note }}
+          </p>
+        </div>
 
+      </section>
 
+      <!-- ===========================================================
+           RIGHT COLUMN: EDIT / DELETE FORM
+           Appears after a record is loaded on the left
+      ============================================================ -->
+      <section class="card edit-panel">
 
-<!--        <ion-header translucent="true">
-          <ion-toolbar>
-            <div class="app-header">
-              <div>
-                <h1>Update & Remove Items</h1>
-                <p class="subtitle">
-                  Search by item name, edit details, or remove records from the inventory.
-                </p>
-              </div>
-            </div>
-          </ion-toolbar>
-        </ion-header>
+        <h2>Edit item details</h2>
 
-        <ion-content [fullscreen]="true">
-          <div class="app-main">
--->
-            <!-- Feedback banners -->
-<!--            <div *ngIf="errorMessage" class="banner error">
-              {{ errorMessage }}
-            </div>
-            <div *ngIf="successMessage" class="banner success">
-              {{ successMessage }}
-            </div>
+        <!-- Dynamic message depending on whether an item is loaded -->
+        <p class="small-note" *ngIf="form.item_name">
+          You are editing: <strong>{{ form.item_name }}</strong>
+        </p>
 
-            <div class="manage-layout">
--->
-              <!-- LEFT COLUMN: SEARCH + CURRENT RECORD ------------------------------>
-<!--              <section class="card search-panel">
-                <h2>Find item by name</h2>
-                <p class="small-note">
-                  Type the exact item name stored on the server, then load it for editing.
-                </p>
+        <p class="small-note" *ngIf="!form.item_name">
+          Load an item from the left panel before editing or deleting.
+        </p>
 
-                <label for="searchName">Item name</label>
-                <input
-                  id="searchName"
-                  type="text"
-                  [(ngModel)]="searchName"
-                />
+        <!-- Form for updating or deleting the selected item -->
+        <form novalidate>
 
-                <div class="button-row">
-                  <button type="button" (click)="onLoadItem()" [disabled]="loadingLookup">
-                    {{ loadingLookup ? 'Loading…' : 'Load item' }}
-                  </button>
-                  <button
-                    type="button"
-                    class="ghost"
-                    (click)="resetForm(); currentItem = null; searchName = ''; successMessage=''; errorMessage='';"
-                    [disabled]="loadingLookup || submittingUpdate || submittingDelete"
-                  >
-                    Clear
-                  </button>
-                </div>
+          <!-- Item ID (read-only, cannot be changed) -->
+          <label for="item_id">Item ID</label>
+          <input
+            id="item_id"
+            type="text"
+            [value]="form.item_id ?? ''"
+            readonly
+          />
 
-                <h3 class="panel-title">Current record</h3>
+          <!-- Item name -->
+          <label for="item_name">Item name *</label>
+          <input
+            id="item_name"
+            type="text"
+            [(ngModel)]="form.item_name"
+            name="item_name"
+            required
+          />
 
-                <p *ngIf="!currentItem" class="empty-note">
-                  No item loaded yet. Search by name and click
-                  <strong>Load item</strong>.
-                </p>
+          <!-- Category dropdown -->
+          <label for="category">Category *</label>
+          <select
+            id="category"
+            [(ngModel)]="form.category"
+            name="category"
+            required
+          >
+            <option *ngFor="let c of categories" [value]="c">
+              {{ c }}
+            </option>
+          </select>
 
-                <div *ngIf="currentItem" class="current-record">
-                  <p><strong>ID:</strong> {{ currentItem.item_id }}</p>
-                  <p><strong>Name:</strong> {{ currentItem.item_name }}</p>
-                  <p><strong>Category:</strong> {{ currentItem.category }}</p>
-                  <p><strong>Status:</strong> {{ currentItem.stock_status }}</p>
-                  <p>
-                    <strong>Qty:</strong> {{ currentItem.quantity }}
-                    &nbsp;|&nbsp;
-                    <strong>Price:</strong> ${{ currentItem.price }}
-                  </p>
-                  <p *ngIf="currentItem.special_note">
-                    <strong>Note:</strong> {{ currentItem.special_note }}
-                  </p>
-                </div>
-              </section>
--->
-              <!-- RIGHT COLUMN: EDIT / DELETE FORM --------------------------------->
-<!--              <section class="card edit-panel">
-                <h2>Edit item details</h2>
-                <p class="small-note" *ngIf="form.item_name">
-                  You are editing: <strong>{{ form.item_name }}</strong>
-                </p>
-                <p class="small-note" *ngIf="!form.item_name">
-                  Load an item from the left panel before editing or deleting.
-                </p>
+          <!-- Quantity -->
+          <label for="quantity">Quantity *</label>
+          <input
+            id="quantity"
+            type="number"
+            min="0"
+            [(ngModel)]="form.quantity"
+            name="quantity"
+            required
+          />
 
-                <form novalidate>
+          <!-- Price -->
+          <label for="price">Price *</label>
+          <input
+            id="price"
+            type="number"
+            min="0"
+            [(ngModel)]="form.price"
+            name="price"
+            required
+          />
 
-                  <label for="item_id">Item ID</label>
-                  <input
-                    id="item_id"
-                    type="text"
-                    [value]="form.item_id ?? ''"
-                    readonly
-                  />
+          <!-- Supplier -->
+          <label for="supplier_name">Supplier name *</label>
+          <input
+            id="supplier_name"
+            type="text"
+            [(ngModel)]="form.supplier_name"
+            name="supplier_name"
+            required
+          />
 
-                  <label for="item_name">Item name *</label>
-                  <input
-                    id="item_name"
-                    type="text"
-                    [(ngModel)]="form.item_name"
-                    name="item_name"
-                    required
-                  />
+          <!-- Stock status -->
+          <label for="stock_status">Stock status *</label>
+          <select
+            id="stock_status"
+            [(ngModel)]="form.stock_status"
+            name="stock_status"
+            required
+          >
+            <option *ngFor="let s of stockStatuses" [value]="s">
+              {{ s }}
+            </option>
+          </select>
 
-                  <label for="category">Category *</label>
-                  <select
-                    id="category"
-                    [(ngModel)]="form.category"
-                    name="category"
-                    required
-                  >
-                    <option *ngFor="let c of categories" [value]="c">
-                      {{ c }}
-                    </option>
-                  </select>
-
-                  <label for="quantity">Quantity *</label>
-                  <input
-                    id="quantity"
-                    type="number"
-                    min="0"
-                    [(ngModel)]="form.quantity"
-                    name="quantity"
-                    required
-                  />
-
-                  <label for="price">Price *</label>
-                  <input
-                    id="price"
-                    type="number"
-                    min="0"
-                    [(ngModel)]="form.price"
-                    name="price"
-                    required
-                  />
-
-                  <label for="supplier_name">Supplier name *</label>
-                  <input
-                    id="supplier_name"
-                    type="text"
-                    [(ngModel)]="form.supplier_name"
-                    name="supplier_name"
-                    required
-                  />
-
-                  <label for="stock_status">Stock status *</label>
-                  <select
-                    id="stock_status"
-                    [(ngModel)]="form.stock_status"
-                    name="stock_status"
-                    required
-                  >
-                    <option *ngFor="let s of stockStatuses" [value]="s">
-                      {{ s }}
-                    </option>
-                  </select>
-
-                  <div class="checkbox-row">
-                    <input
-                      id="featured_item"
-                      type="checkbox"
-                      [(ngModel)]="form.featured_item"
-                      name="featured_item"
-                    />
-                    <label for="featured_item">Mark as featured item</label>
-                  </div>
-
-                  <label for="special_note">Special note</label>
-                  <textarea
-                    id="special_note"
-                    rows="3"
-                    [(ngModel)]="form.special_note"
-                    name="special_note"
-                  ></textarea>
-
-                  <div class="button-row">
-                    <button
-                      type="button"
-                      (click)="onUpdateItem()"
-                      [disabled]="submittingUpdate || !form.item_name"
-                    >
-                      {{ submittingUpdate ? 'Saving…' : 'Save changes' }}
-                    </button>
-
-                    <button
-                      type="button"
-                      class="danger"
-                      (click)="confirmDelete()"
-                      [disabled]="submittingDelete || !form.item_name"
-                    >
-                      {{ submittingDelete ? 'Deleting…' : 'Delete item' }}
-                    </button>
-                  </div>
-
-                  <p *ngIf="isProtected" class="protected-note">
-                    The server protects this item from deletion (e.g. "Laptop").
-                  </p>
-                </form>
-              </section>
-
-            </div>
+          <!-- Featured toggle -->
+          <div class="checkbox-row">
+            <input
+              id="featured_item"
+              type="checkbox"
+              [(ngModel)]="form.featured_item"
+              name="featured_item"
+            />
+            <label for="featured_item">Mark as featured item</label>
           </div>
--->
-          <!-- Help FAB (must be direct child of ion-content so it scrolls properly) -->
-<!--          <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="help-fab">
-            <ion-fab-button color="dark" (click)="showHelp()">
-              <ion-icon name="help-circle-outline"></ion-icon>
-            </ion-fab-button>
-          </ion-fab>
-        </ion-content>
--->
+
+          <!-- Special note (optional) -->
+          <label for="special_note">Special note</label>
+          <textarea
+            id="special_note"
+            rows="3"
+            [(ngModel)]="form.special_note"
+            name="special_note"
+          ></textarea>
+
+          <!-- Action buttons: update + delete -->
+          <div class="button-row">
+            <button
+              type="button"
+              (click)="onUpdateItem()"
+              [disabled]="submittingUpdate || !form.item_name"
+            >
+              {{ submittingUpdate ? 'Saving…' : 'Save changes' }}
+            </button>
+
+            <button
+              type="button"
+              class="danger"
+              (click)="confirmDelete()"
+              [disabled]="submittingDelete || !form.item_name"
+            >
+              {{ submittingDelete ? 'Deleting…' : 'Delete item' }}
+            </button>
+          </div>
+
+          <!-- Protected record warning -->
+          <p *ngIf="isProtected" class="protected-note">
+            The server protects this item from deletion (e.g. "Laptop").
+          </p>
+        </form>
+
+      </section>
+    </div>
+  </div>
+
+  <!-- =============================================================
+       FLOATING HELP BUTTON
+       Appears in bottom-right corner and opens help instructions
+================================================================ -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="help-fab">
+    <ion-fab-button color="dark" (click)="showHelp()">
+      <ion-icon name="help-circle-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
