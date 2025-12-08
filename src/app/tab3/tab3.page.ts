@@ -1,38 +1,13 @@
 import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-tab3',
-  templateUrl: 'tab3.page.html',
-  styleUrls: ['tab3.page.scss'],
-  standalone: false,
-})
-export class Tab3Page {
-  
-}
-
-
-
-
-
-
-
-
-/*
-
-**********************************
-⭐⭐-------DO NOT CHNAGE OR DELET ANY OF THE FOLLOWING LINES. YOUR CODE GOES ABOVE THIS GREEN SECTION-------⭐⭐
-**********************************
-
-
-
-
-
-/*
-import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { InventoryService } from '../services/inventory.service';
 import { Item } from '../models/item';
 
+/**
+ * Form model used by the right-side Edit/Delete panel.
+ * Matches the structure of the Item model but supports nulls for
+ * required numeric fields when the form first loads.
+ */
 interface EditForm {
   item_id: number | null;
   item_name: string;
@@ -53,14 +28,20 @@ interface EditForm {
 })
 export class Tab3Page {
 
-  // left-side search
-  searchName = '';
-  loadingLookup = false;
+  // -------------------------------------------------------------------------
+  // LEFT SIDE: SEARCH PANEL
+  // Used to load a specific record by its name
+  // -------------------------------------------------------------------------
+  searchName = '';               // The name typed by the user
+  loadingLookup = false;         // Controls spinner/disabled state during lookup
 
-  // current record (for the “Current record” panel)
+  // Stores the currently loaded record shown in the "Current record" card
   currentItem: Item | null = null;
 
-  // right-side edit form
+  // -------------------------------------------------------------------------
+  // RIGHT SIDE: EDIT + DELETE FORM
+  // Populated after a successful lookup
+  // -------------------------------------------------------------------------
   form: EditForm = {
     item_id: null,
     item_name: '',
@@ -73,33 +54,43 @@ export class Tab3Page {
     special_note: ''
   };
 
+  // Dropdown list options
   readonly categories = ['Electronics', 'Furniture', 'Clothing', 'Tools', 'Miscellaneous'];
   readonly stockStatuses = ['In Stock', 'Low Stock', 'Out of Stock'];
 
-  // banners
+  // UI banners for user feedback
   successMessage = '';
   errorMessage = '';
-  submittingUpdate = false;
-  submittingDelete = false;
+  submittingUpdate = false;      // Used when saving edits
+  submittingDelete = false;      // Used when deleting a record
 
-  // protected name from the brief
+  // Hardcoded protected item name per assignment brief
   readonly protectedItemName = 'Laptop';
 
-  // help text
+  // -------------------------------------------------------------------------
+  // HELP TEXT FOR FLOATING ACTION BUTTON (FAB)
+  // Displayed inside an Ionic alert dialog
+  // -------------------------------------------------------------------------
   readonly helpText = `
     • Search for an item by its exact name, then press  Load item . 
     • The current record details appear on the left and the form on the right is filled in. 
     • Edit any fields and press  Save changes  to update. 
-    • Use <strong>Delete item to remove it (except the protected “Laptop” record).
+    • Use <strong>Delete item</strong> to remove it (except the protected “Laptop” record).
   `;
 
   constructor(
-    private inventoryService: InventoryService,
-    private alertCtrl: AlertController
+    private inventoryService: InventoryService,   // API communication service
+    private alertCtrl: AlertController            // Used to show popup alerts
   ) {}
 
-  // ------------ HELP FAB ------------------------------------
+  // =========================================================================
+  // HELP BUTTON HANDLER
+  // =========================================================================
 
+  /**
+   * Opens an informational popup explaining how to use this tab.
+   * Triggered by the floating help button on the bottom-right corner.
+   */
   async showHelp() {
     const alert = await this.alertCtrl.create({
       header: 'How to use "Update & Remove Items"',
@@ -109,8 +100,14 @@ export class Tab3Page {
     await alert.present();
   }
 
-  // ------------ LOAD BY NAME --------------------------------
+  // =========================================================================
+  // LOAD EXISTING ITEM BY NAME
+  // =========================================================================
 
+  /**
+   * Looks up an item in the database using its exact name.
+   * Populates the left preview panel and the right edit form.
+   */
   onLoadItem() {
     this.successMessage = '';
     this.errorMessage = '';
@@ -130,7 +127,7 @@ export class Tab3Page {
         this.loadingLookup = false;
         console.log('Raw response from getItemByName:', res);
 
-        // Handle either a single object OR an array with one object
+        // API may return a single object or an array of results → normalize to one item
         const item: any = Array.isArray(res) ? res[0] : res;
 
         if (!item || !item.item_name) {
@@ -139,9 +136,12 @@ export class Tab3Page {
           return;
         }
 
+        // Store the result and sync the edit form
         this.currentItem = item as Item;
         this.patchFormFromItem(item as Item);
-        this.successMessage = `Item "${item.item_name}" loaded successfully. You can now update or delete it.`;
+
+        this.successMessage =
+          `Item "${item.item_name}" loaded successfully. You can now update or delete it.`;
       },
       error: (err) => {
         console.error('Error loading item by name', err);
@@ -151,7 +151,9 @@ export class Tab3Page {
     });
   }
 
-  // fill the edit form from the loaded item
+  /**
+   * Copies the loaded item data into the edit form on the right panel.
+   */
   private patchFormFromItem(item: Item) {
     this.form = {
       item_id: item.item_id ?? null,
@@ -166,8 +168,14 @@ export class Tab3Page {
     };
   }
 
-  // ------------ UPDATE ---------------------------------------
+  // =========================================================================
+  // UPDATE EXISTING ITEM
+  // =========================================================================
 
+  /**
+   * Sends an update request to the backend using the current form values.
+   * Basic validation occurs here before sending the request.
+   */
   onUpdateItem() {
     if (!this.form.item_name.trim()) {
       this.errorMessage = 'Item name is required before updating.';
@@ -178,6 +186,7 @@ export class Tab3Page {
     this.errorMessage = '';
     this.submittingUpdate = true;
 
+    // Build payload in the format expected by the backend
     const payload: Item = {
       item_id: this.form.item_id!,
       item_name: this.form.item_name.trim(),
@@ -195,7 +204,8 @@ export class Tab3Page {
         console.log('Update response:', res);
         this.submittingUpdate = false;
         this.successMessage = `Item "${this.form.item_name}" updated successfully.`;
-        // keep currentItem in sync
+
+        // Update preview panel to reflect latest changes
         this.currentItem = payload;
       },
       error: (err) => {
@@ -206,12 +216,23 @@ export class Tab3Page {
     });
   }
 
-  // ------------ DELETE ---------------------------------------
+  // =========================================================================
+  // DELETE EXISTING ITEM
+  // =========================================================================
 
+  /**
+   * Returns true if the current form represents the protected item
+   * (e.g., "Laptop"), which the server will not allow deleting.
+   */
   get isProtected(): boolean {
-    return (this.form.item_name || '').toLowerCase() === this.protectedItemName.toLowerCase();
+    return (this.form.item_name || '').toLowerCase() ===
+           this.protectedItemName.toLowerCase();
   }
 
+  /**
+   * Asks the user to confirm before deleting an item.
+   * Prevents deletion of protected server items.
+   */
   async confirmDelete() {
     if (!this.form.item_name.trim()) {
       this.errorMessage = 'Load an item before trying to delete.';
@@ -238,6 +259,9 @@ export class Tab3Page {
     await alert.present();
   }
 
+  /**
+   * Performs deletion after user confirmation.
+   */
   private onDeleteItem() {
     this.successMessage = '';
     this.errorMessage = '';
@@ -250,6 +274,8 @@ export class Tab3Page {
         console.log('Delete response:', res);
         this.submittingDelete = false;
         this.successMessage = `Item "${name}" deleted successfully.`;
+
+        // Reset UI after deletion
         this.currentItem = null;
         this.resetForm();
         this.searchName = '';
@@ -257,13 +283,19 @@ export class Tab3Page {
       error: (err) => {
         console.error('Error deleting item', err);
         this.submittingDelete = false;
-        this.errorMessage = 'Failed to delete item. The server may be protecting this record.';
+        this.errorMessage =
+          'Failed to delete item. The server may be protecting this record.';
       }
     });
   }
 
-  // ------------ UTIL -----------------------------------------
+  // =========================================================================
+  // UTILITIES
+  // =========================================================================
 
+  /**
+   * Clears the edit form back to its initial (empty) state.
+   */
   resetForm() {
     this.form = {
       item_id: null,
@@ -278,4 +310,3 @@ export class Tab3Page {
     };
   }
 }
-*/

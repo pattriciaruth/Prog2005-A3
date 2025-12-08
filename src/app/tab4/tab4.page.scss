@@ -1,50 +1,69 @@
-/* Header */
+/* --------------------------------------------------------------------
+   HEADER BAR STYLING
+   Custom background + text colour to give the header a warm, 
+   parchment-style appearance that matches the privacy theme.
+--------------------------------------------------------------------- */
 .header-bar {
-  --background: #f6efe7;
-  --color: #4b2e13;
-  border-bottom: 1px solid #eadfce;
+  --background: #f6efe7;   /* Soft cream tone for readability */
+  --color: #4b2e13;        /* Dark brown text for strong contrast */
+  border-bottom: 1px solid #eadfce;  /* Gentle divider below header */
 }
 
-/* Page Layout */
+/* --------------------------------------------------------------------
+   PAGE LAYOUT + BACKGROUND
+   Applies padding and a subtle warm background colour to the page.
+--------------------------------------------------------------------- */
 .page-container {
-  --background: #f8f4ef;
-  padding: 1.2rem;
+  --background: #f8f4ef;   /* Slightly darker cream background */
+  padding: 1.2rem;         /* Consistent spacing around the content */
 }
 
+/* --------------------------------------------------------------------
+   CONTENT CARD CONTAINER
+   Main card holding all privacy/security sections.
+   Styled to match the card appearance used in other tabs.
+--------------------------------------------------------------------- */
 .content-card {
-  background: #ffffff;
-  padding: 1.8rem;
-  border-radius: 16px;
-  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
-  border: 1px solid #e8ddcd;
+  background: #ffffff;                     /* White card for contrast */
+  padding: 1.8rem;                         /* Inner spacing */
+  border-radius: 16px;                     /* Smooth rounded corners */
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);  /* Soft depth shadow */
+  border: 1px solid #e8ddcd;               /* Warm-toned border */
 }
 
-/* Typography */
+/* --------------------------------------------------------------------
+   TYPOGRAPHY STYLING
+   Heading hierarchy and colour choices improve readability and visual 
+   structure while matching the privacy/security theme.
+--------------------------------------------------------------------- */
 h1 {
   font-size: 1.7rem;
   margin-bottom: 1rem;
-  color: #4b2e13;
+  color: #4b2e13;         /* Warm deep brown title colour */
 }
 
 h2 {
   margin-top: 1.4rem;
   font-size: 1.2rem;
-  color: #7e0791;
+  color: #7e0791;         /* Purple tone for section headings */
 }
 
 .intro {
   font-size: 1rem;
   margin-bottom: 1rem;
-  color: #504a45;
+  color: #504a45;         /* Neutral warm grey */
 }
 
 p {
-  color: #4a4640;
-  line-height: 1.5;
+  color: #4a4640;         /* Paragraph text colour */
+  line-height: 1.5;       /* Comfortable line spacing */
   margin-top: 0.4rem;
 }
 
-/* Help icon button */
+/* --------------------------------------------------------------------
+   HELP ICON BUTTON
+   Ensures the FAB Help button uses the same warm accent tone.
+--------------------------------------------------------------------- */
 ion-button {
-  --color: #4b2e13;
+  --color: #4b2e13;       /* Icon/text colour for help button */
 }

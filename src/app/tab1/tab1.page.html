@@ -1,39 +1,46 @@
+<!-- Page Header with title and item count badge -->
 <ion-header translucent="true">
   <ion-toolbar>
     <div class="app-header">
+
+      <!-- Title + subtitle block -->
       <div class="title-block">
         <h1>Item inventory</h1>
         <p class="subtitle">Browse items, stock levels, and featured products.</p>
       </div>
 
+      <!-- Shows the number of items after filters (fallback to full count) -->
       <div class="header-meta">
         <ion-badge color="tertiary">
           {{ filteredItems.length || items.length }} items
         </ion-badge>
       </div>
+
     </div>
   </ion-toolbar>
 </ion-header>
 
+<!-- Main scrollable content area -->
 <ion-content [fullscreen]="true">
   <div class="app-main">
 
-    <!-- Error banner -->
+    <!-- Error message banner shown when an API or data error occurs -->
     <div *ngIf="errorMessage" class="banner error">
       <ion-icon name="alert-circle-outline"></ion-icon>
       <span>{{ errorMessage }}</span>
     </div>
 
-    <!-- Loading note -->
+    <!-- Loading banner displayed while fetching inventory from server -->
     <div *ngIf="loading" class="banner loading">
       <ion-icon name="sync-outline" class="spin"></ion-icon>
       <span>Loading inventory from server…</span>
     </div>
 
-    <!-- Search + filters card -->
+    <!-- Search bar + Filters card -->
     <section class="card search-card">
       <h2>Browse items</h2>
 
+      <!-- Search input for item name -->
       <ion-item lines="none" class="search-row">
         <ion-icon slot="start" name="search-outline"></ion-icon>
         <ion-input
@@ -43,7 +50,10 @@
         </ion-input>
       </ion-item>
 
+      <!-- Filter controls: stock status + featured -->
       <div class="filters-row">
+
+        <!-- Stock-level segment buttons -->
         <div class="toolbar-group">
           <label>Stock status</label>
           <ion-segment [value]="stockFilter" (ionChange)="onStockFilterChange($event)">
@@ -62,6 +72,7 @@
           </ion-segment>
         </div>
 
+        <!-- Toggle switch: show only featured items -->
         <ion-item lines="none" class="featured-toggle">
           <ion-label>Featured only</ion-label>
           <ion-toggle
@@ -73,7 +84,7 @@
       </div>
     </section>
 
-    <!-- Protected record note (matches slides: “protected record can’t delete”) -->
+    <!-- Notice shown when a protected demo item exists (cannot delete it) -->
     <section *ngIf="hasProtectedRecord" class="protected-note card">
       <div class="protected-content">
         <ion-icon name="warning-outline"></ion-icon>
@@ -87,7 +98,7 @@
       </div>
     </section>
 
-    <!-- Empty state -->
+    <!-- Empty state card: shows when no items match search/filter criteria -->
     <section
       *ngIf="!loading && !errorMessage && filteredItems.length === 0"
       class="empty-state card">
@@ -96,8 +107,10 @@
       <p class="small-note">Try clearing the filters, or add new items from the Manage tab.</p>
     </section>
 
-    <!-- Item cards (Campus-store style) -->
+    <!-- Main item list card (Campus store style layout) -->
     <section *ngIf="filteredItems.length > 0" class="items-list card">
+
+      <!-- Header above list -->
       <div class="table-header-row">
         <h2>Items</h2>
         <p class="small-note">
@@ -105,55 +118,69 @@
         </p>
       </div>
 
+      <!-- List of all filtered items -->
       <ion-list lines="none">
         <ion-item *ngFor="let item of filteredItems" class="item-row">
-          <!-- Icon / category pill -->
+
+          <!-- Category icon box -->
           <div class="item-icon-box" slot="start">
             <ion-icon [name]="getCategoryIcon(item.category)"></ion-icon>
           </div>
 
-          <!-- Main content -->
+          <!-- Main item content -->
           <ion-label>
+
+            <!-- Row: name, category pills, stock status, featured tag, price + qty -->
             <div class="item-title-row">
+
+              <!-- Left side: name + tags -->
               <div>
                 <h3>{{ item.item_name || '(Unnamed item)' }}</h3>
+
+                <!-- Category / Stock status / Featured pills -->
                 <div class="tag-row">
                   <span class="pill category-pill">{{ item.category || 'Misc' }}</span>
+
                   <span
                     class="pill stock-pill"
                     [ngClass]="'lvl-' + getStockStatus(item)">
                     {{ getStockLabel(item) }}
                   </span>
+
                   <span *ngIf="item.featured_item === 1" class="pill featured-pill">
                     Featured
                   </span>
                 </div>
               </div>
 
+              <!-- Right side: price + quantity -->
               <div class="price-block">
                 <span class="price">${{ item.price }}</span>
                 <span class="qty">Qty: {{ item.quantity }}</span>
               </div>
+
             </div>
 
+            <!-- Supplier + ID line -->
             <p class="meta-line">
               ID #{{ item.item_id }} · Supplier:
               <strong>{{ item.supplier_name || 'Unknown supplier' }}</strong>
             </p>
 
+            <!-- Special note (optional) -->
             <p *ngIf="item.special_note" class="note-line">
               {{ item.special_note }}
             </p>
+
           </ion-label>
         </ion-item>
       </ion-list>
     </section>
 
-    
-
   </div>
 </ion-content>
-<!-- Floating Help Button -->
+
+<!-- Floating Help Button (fixed in bottom-right corner of screen) -->
 <ion-fab vertical="bottom" horizontal="end" slot="fixed">
   <ion-fab-button color="dark" (click)="showHelp()">
     <ion-icon name="help-circle-outline"></ion-icon>

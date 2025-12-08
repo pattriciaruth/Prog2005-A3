@@ -1,209 +1,228 @@
+<!-- ============================================================
+     HEADER AREA
+     Displays title and description for the Manage Items page
+=============================================================== -->
+<ion-header translucent="true">
+  <ion-toolbar>
+    <div class="app-header">
+      <div>
+        <h1>Manage Items</h1>
+        <p class="subtitle">Add new inventory items and review featured products.</p>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
 
+<!-- ============================================================
+     MAIN CONTENT AREA
+=============================================================== -->
+<ion-content [fullscreen]="true">
+  <div class="app-main">
 
+    <!-- --------------------------------------------------------
+         FEEDBACK BANNERS (Form validation, success, errors)
+         These show dynamically based on component state
+    ------------------------------------------------------------ -->
+    <div *ngIf="errorMessage" class="banner error">
+      {{ errorMessage }}
+    </div>
 
+    <div *ngIf="successMessage" class="banner success">
+      {{ successMessage }}
+    </div>
 
+    <div *ngIf="validationErrors.length" class="banner error">
+      <ul>
+        <li *ngFor="let err of validationErrors">{{ err }}</li>
+      </ul>
+    </div>
 
+    <!-- =======================================================
+         GRID LAYOUT
+         Left = Item creation form
+         Right = Featured items preview
+    =========================================================== -->
+    <div class="manage-layout">
 
+      <!-- =====================================================
+           LEFT SIDE: ITEM CREATION FORM
+           Used to add new items to the inventory database
+      ========================================================= -->
+      <section class="form-box">
+        <h3>Add new item</h3>
+        <p class="small-note">
+          Fill in the details below to create a new inventory record.
+        </p>
 
+        <!-- Angular form using ngModel binding -->
+        <form (ngSubmit)="onSubmit()" #itemForm="ngForm" novalidate>
 
+          <!-- Item name -->
+          <label for="item_name">Item name *</label>
+          <input
+            id="item_name"
+            name="item_name"
+            type="text"
+            [(ngModel)]="form.item_name"
+            required
+          />
 
+          <!-- Category selection -->
+          <label for="category">Category *</label>
+          <select
+            id="category"
+            name="category"
+            [(ngModel)]="form.category"
+            required
+          >
+            <option *ngFor="let c of category" [value]="c">{{ c }}</option>
+          </select>
 
+          <!-- Quantity -->
+          <label for="quantity">Quantity *</label>
+          <input
+            id="quantity"
+            name="quantity"
+            type="number"
+            min="0"
+            [(ngModel)]="form.quantity"
+            required
+          />
 
+          <!-- Price -->
+          <label for="price">Price *</label>
+          <input
+            id="price"
+            name="price"
+            type="number"
+            min="0"
+            [(ngModel)]="form.price"
+            required
+          />
 
+          <!-- Supplier -->
+          <label for="supplier_name">Supplier name *</label>
+          <input
+            id="supplier_name"
+            name="supplier_name"
+            type="text"
+            [(ngModel)]="form.supplier_name"
+            required
+          />
 
+          <!-- Stock status -->
+          <label for="stock_status">Stock status *</label>
+          <select
+            id="stock_status"
+            name="stock_status"
+            [(ngModel)]="form.stock_status"
+            required
+          >
+            <option *ngFor="let s of stock_status" [value]="s">{{ s }}</option>
+          </select>
 
-<!--
-
-**********************************
-⭐⭐-------DO NOT CHNAGE OR DELET ANY OF THE FOLLOWING LINES. YOUR CODE GOES ABOVE THIS GREEN SECTION-------⭐⭐
-**********************************
-
--->
-
-
-<!--        <ion-header translucent="true">
-          <ion-toolbar>
-            <div class="app-header">
-              <div>
-                <h1>Manage Items</h1>
-                <p class="subtitle">Add new inventory items and review featured products.</p>
-              </div>
-            </div>
-          </ion-toolbar>
-        </ion-header>
-
-        <ion-content [fullscreen]="true">
-          <div class="app-main">
--->            
-
-            <!-- Feedback banners -->
-<!--            <div *ngIf="errorMessage" class="banner error">
-              {{ errorMessage }}
-            </div>
-            <div *ngIf="successMessage" class="banner success">
-              {{ successMessage }}
-            </div>
-            <div *ngIf="validationErrors.length" class="banner error">
-              <ul>
-                <li *ngFor="let err of validationErrors">{{ err }}</li>
-              </ul>
-            </div>
-
-            <div class="manage-layout">
--->              
-
-              <!-- LEFT: Add item form -->
-<!--              <section class="form-box">
-                <h3>Add new item</h3>
-                <p class="small-note">
-                  Fill in the details below to create a new inventory record.
-                </p>
-
-                <form (ngSubmit)="onSubmit()" #itemForm="ngForm" novalidate>
-
-                  <label for="item_name">Item name *</label>
-                  <input
-                    id="item_name"
-                    name="item_name"
-                    type="text"
-                    [(ngModel)]="form.item_name"
-                    required
-                  />
-
-                  <label for="category">Category *</label>
-                  <select
-                    id="category"
-                    name="category"
-                    [(ngModel)]="form.category"
-                    required
-                  >
-                    <option *ngFor="let c of category" [value]="c">{{ c }}</option>
-                  </select>
-
-                  <label for="quantity">Quantity *</label>
-                  <input
-                    id="quantity"
-                    name="quantity"
-                    type="number"
-                    min="0"
-                    [(ngModel)]="form.quantity"
-                    required
-                  />
-
-                  <label for="price">Price *</label>
-                  <input
-                    id="price"
-                    name="price"
-                    type="number"
-                    min="0"
-                    [(ngModel)]="form.price"
-                    required
-                  />
-
-                  <label for="supplier_name">Supplier name *</label>
-                  <input
-                    id="supplier_name"
-                    name="supplier_name"
-                    type="text"
-                    [(ngModel)]="form.supplier_name"
-                    required
-                  />
-
-                  <label for="stock_status">Stock status *</label>
-                  <select
-                    id="stock_status"
-                    name="stock_status"
-                    [(ngModel)]="form.stock_status"
-                    required
-                  >
-                    <option *ngFor="let s of stock_status" [value]="s">{{ s }}</option>
-                  </select>
-
-                  <div class="checkbox-row">
-                    <input
-                      id="featured_item"
-                      name="featured_item"
-                      type="checkbox"
-                      [(ngModel)]="form.featured_item"
-                    />
-                    <label for="featured_item">Mark as featured item</label>
-                  </div>
-
-                  <label for="special_note">Special note</label>
-                  <textarea
-                    id="special_note"
-                    name="special_note"
-                    rows="3"
-                    [(ngModel)]="form.special_note">
-                  </textarea>
-
-                  <div class="button-row">
-                    <button type="submit" [disabled]="submitting">
-                      {{ submitting ? 'Saving…' : 'Add item' }}
-                    </button>
-                    <button type="button" class="ghost" (click)="resetForm()" [disabled]="submitting">
-                      Clear
-                    </button>
-                  </div>
-                </form>
-              </section>
--->              
-
-              <!-- RIGHT: Featured items list -->
-<!--              <section class="right-column">
-
-                <div class="card search-card">
-                  <h2>Featured items</h2>
-                  <p class="small-note">
-                    Items marked as “featured” will be highlighted in the browse tab.
-                  </p>
-
-                  <div *ngIf="loadingFeatured" class="empty-note">
-                    Loading featured items…
-                  </div>
-
-                  <div *ngIf="!loadingFeatured && featuredItems.length === 0" class="empty-note">
-                    No featured items yet. Tick the “featured item” box when creating an item.
-                  </div>
-
-                  <div *ngIf="featuredItems.length > 0" class="table-wrapper">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Category</th>
-                          <th>Stock</th>
-                          <th>Qty</th>
-                          <th>Price</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let item of featuredItems">
-                          <td>{{ item.item_name }}</td>
-                          <td>{{ item.category }}</td>
-                          <td>
-                            <span class="stock-pill" [ngClass]="getStockBadgeClass(item)">
-                              {{ item.stock_status }}
-                            </span>
-                          </td>
-                          <td>{{ item.quantity }}</td>
-                          <td>\${{ item.price }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-              </section>
-            </div>
+          <!-- Featured toggle -->
+          <div class="checkbox-row">
+            <input
+              id="featured_item"
+              name="featured_item"
+              type="checkbox"
+              [(ngModel)]="form.featured_item"
+            />
+            <label for="featured_item">Mark as featured item</label>
           </div>
--->          
 
-          <!-- Floating Help Button (same behaviour as Tab 1 & 4) -->
-<!--        <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="help-fab">
-          <ion-fab-button color="dark" (click)="openHelp()">
-            <ion-icon name="help-circle-outline"></ion-icon>
-          </ion-fab-button>
-        </ion-fab>
-        </ion-content>
--->
+          <!-- Special note (optional) -->
+          <label for="special_note">Special note</label>
+          <textarea
+            id="special_note"
+            name="special_note"
+            rows="3"
+            [(ngModel)]="form.special_note">
+          </textarea>
+
+          <!-- Form action buttons -->
+          <div class="button-row">
+            <button type="submit" [disabled]="submitting">
+              {{ submitting ? 'Saving…' : 'Add item' }}
+            </button>
+            <button type="button" class="ghost" (click)="resetForm()" [disabled]="submitting">
+              Clear
+            </button>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- =====================================================
+           RIGHT SIDE: FEATURED ITEM PREVIEW LIST
+           Displays only items marked as "featured"
+      ========================================================= -->
+      <section class="right-column">
+
+        <div class="card search-card">
+          <h2>Featured items</h2>
+          <p class="small-note">
+            Items marked as “featured” will be highlighted in the browse tab.
+          </p>
+
+          <!-- Loading message -->
+          <div *ngIf="loadingFeatured" class="empty-note">
+            Loading featured items…
+          </div>
+
+          <!-- Empty message when no featured items are found -->
+          <div *ngIf="!loadingFeatured && featuredItems.length === 0" class="empty-note">
+            No featured items yet. Tick the “featured item” box when creating an item.
+          </div>
+
+          <!-- Featured item table -->
+          <div *ngIf="featuredItems.length > 0" class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Stock</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let item of featuredItems">
+                  <td>{{ item.item_name }}</td>
+                  <td>{{ item.category }}</td>
+
+                  <!-- Stock-level badge (colored by SCSS class) -->
+                  <td>
+                    <span class="stock-pill" [ngClass]="getStockBadgeClass(item)">
+                      {{ item.stock_status }}
+                    </span>
+                  </td>
+
+                  <td>{{ item.quantity }}</td>
+                  <td>${{ item.price }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       FLOATING HELP BUTTON
+       Opens a help dialog (same behaviour as Tabs 1 & 4)
+  =============================================================== -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="help-fab">
+    <ion-fab-button color="dark" (click)="openHelp()">
+      <ion-icon name="help-circle-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
